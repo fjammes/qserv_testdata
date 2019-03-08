@@ -31,6 +31,7 @@ from __future__ import absolute_import, division, print_function
 #  Imports of standard modules --
 # -------------------------------
 import argparse
+
 import logging
 import os
 import sys
@@ -49,8 +50,6 @@ _LOG = logging.getLogger()
 # ---------------------------------
 # Local non-exported definitions --
 # ---------------------------------
-
-#import pdb
 
 def _parse_args():
 
@@ -89,6 +88,9 @@ def _parse_args():
     group.add_argument("-u", "--update", action="store_true", dest="update_data",
                        default=False,
                        help="Update databases defined in a previous session")    
+    group.add_argument("-r", "--doNotRegisterXrootdDb", action="store_true", dest="doNotRegisterXrootDb",
+                       default=False,
+                       help="Do not register xroot DB (linked to the update option)")
 
     default_testdata_dir = None
     if os.environ.get('QSERV_TESTDATA_DIR') is not None:
@@ -173,7 +175,7 @@ def _parse_args():
 
 
 def _run_integration_test(case_id, testdata_dir, out_dir, mode_list,
-                          multi_node, load_data, update_data, stop_at_query):
+                          multi_node, load_data, update_data, doNotRegisterXrootdDb, stop_at_query):
     """ Run integration tests, eventually perform data-loading and query results
     comparison
     @param case_id: test case number
@@ -184,7 +186,7 @@ def _run_integration_test(case_id, testdata_dir, out_dir, mode_list,
     @param load_data: load data before running queries
     @param stop_at_query: run queries between 0 and it
     """
-    bench = benchmark.Benchmark(case_id, multi_node, testdata_dir, update_data, out_dir)
+    bench = benchmark.Benchmark(case_id, multi_node, testdata_dir, update_data, doNotRegisterXrootdDb, out_dir)
     bench.run(mode_list, load_data, stop_at_query)
 
     return_code = 1
@@ -214,8 +216,6 @@ def _run_integration_test(case_id, testdata_dir, out_dir, mode_list,
 
 def main():
 
-#    pdb.set_trace()
-    
     args = _parse_args()
 
     multi_node = benchmark.is_multi_node()
@@ -235,7 +235,7 @@ def main():
         ret_code = _run_integration_test(args.case_id, args.testdata_dir,
                                          args.out_dir, args.mode,
                                          multi_node,
-                                         args.load_data, args.update_data, args.stop_at_query)
+                                         args.load_data, args.update_data, args.doNotRegisterXrootDb, args.stop_at_query)
 
     sys.exit(ret_code)
 

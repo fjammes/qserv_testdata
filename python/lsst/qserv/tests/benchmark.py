@@ -36,7 +36,6 @@ try:
     import configparser
 except ImportError:
     import ConfigParser as configparser  # python2
-    
 import errno
 from filecmp import dircmp
 import logging
@@ -101,14 +100,14 @@ class Benchmark(object):
         Top-level directory for test outputs.
     """
 
-    def __init__(self, case_id, multi_node, testdata_dir, update_data, out_dirname_prefix=None):
+    def __init__(self, case_id, multi_node, testdata_dir, update_data, doNotRegisterXrootdDb, out_dirname_prefix=None):
 
-#        self.config = commons.getConfig()
         self.config = commons.read_user_config()
 
         self._case_id = case_id
         self._multi_node = multi_node
         self._update_data = update_data
+        self._doNotRegisterXrootdDb = doNotRegisterXrootdDb
 
         if not out_dirname_prefix:
             out_dirname_prefix = self.config['qserv']['tmp_dir']
@@ -323,6 +322,7 @@ class Benchmark(object):
                 dbName,
                 self._multi_node,
                 self._update_data,
+                self._doNotRegisterXrootdDb,
                 self._out_dirname
             )
         elif mode == 'qserv':
@@ -332,6 +332,7 @@ class Benchmark(object):
                 dbName,
                 self._multi_node,
                 self._update_data,
+                self._doNotRegisterXrootdDb,
                 self._out_dirname
             )
         else:

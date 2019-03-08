@@ -43,7 +43,8 @@ class MysqlLoader(DbLoader):
                  data_reader,
                  db_name,
                  multi_node,
-                 update_data,
+                 update_data,                 
+                 doNotRegisterXrootdDb,
                  out_dirname):
 
         super(self.__class__, self).__init__(config,
@@ -54,6 +55,7 @@ class MysqlLoader(DbLoader):
         self.logger = logging.getLogger(__name__)
 
         self.update_data = update_data
+        self.doNotRegisterXrootdDb = doNotRegisterXrootdDb
         self.dataConfig = data_reader
 
     def createLoadTable(self, table):
@@ -88,15 +90,13 @@ class MysqlLoader(DbLoader):
                             stderr=sys.stderr)
         self.logger.info("Partitioned data loaded for table %s", table)
 
-
     def prepareDatabase(self):
         """
         Connect to MySQL via socket
         Create MySQL database
         Create MySQL command-line client
         """
-
+        
         if not self.update_data:
             self.czar_wmgr.dropDb(self._dbName, mustExist=False)
             self.czar_wmgr.createDb(self._dbName)
-

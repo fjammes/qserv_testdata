@@ -7,6 +7,7 @@
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
+
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
@@ -45,6 +46,7 @@ class QservLoader(DbLoader):
                  db_name,
                  multi_node,
                  update_data,
+    	         doNotRegisterXrootdDb,
                  out_dirname):
 
         super(self.__class__, self).__init__(config,
@@ -62,7 +64,8 @@ class QservLoader(DbLoader):
         self.tmpDir = self.config['qserv']['tmp_dir']
         self.multi_node = multi_node
         self.update_data = update_data
-        
+        self.doNotRegisterXrootdDb = doNotRegisterXrootdDb
+
     def createLoadTable(self, table):
         """
         Create and load a table in Qserv
@@ -102,10 +105,17 @@ class QservLoader(DbLoader):
 
         loaderCmd += self.loaderCmdCommonArgs(table)
 
+        # If tables are already created and the data upload is made in several 
+        #        steps, the delete-tables and css-remove options are deleted
+        # A new flag stating that the empty chunk table should not be reset
+        #        is also set (dbLoader.py)
         if self.update_data:
-            loaderCmd.remove('--delete-tables')
+            if "--delete-tables" in loaderCmd: loaderCmd.remove('--delete-tables')
+            if "--css-remove" in loaderCmd: loaderCmd.remove("--css-remove")
+            loaderCmd += ['--doNotResetEmptyChunks']
+
             print(loaderCmd)
-        
+
         # Use same logging configuration for loader and integration test
         # command line, this allow to redirect loader to sys.stdout, sys.stderr
         commons.run_command(loaderCmd,
@@ -129,7 +139,6 @@ class QservLoader(DbLoader):
                          self._dbName)
 
         if not self.update_data:
-
             self.czar_wmgr.dropDb(self._dbName, mustExist=False)
             self.czar_wmgr.createDb(self._dbName)
 
@@ -152,15 +161,15 @@ class QservLoader(DbLoader):
             for wmgr in self.nWmgrs.values():
                 wmgr.xrootdRegisterDb(self._dbName, allowDuplicate=True)
         else:
+            self.logger.info("***** SES **** wmgr.xrootdRegisterDb")
             self.czar_wmgr.xrootdRegisterDb(self._dbName, allowDuplicate=True)
 
     def finalize(self):
         """Finalize data loading process
         """
-        self.workerInsertXrootdExportPath()
+        if not self.doNotRegisterXrootdDb:
+            self.workerInsertXrootdExportPath()
 
         # xrootd is restarted by wmgr
         # Reload Qserv (empty) chunk cache
-        if not self.update_data:
-            self.resetChunksCache()
-
+        self.resetChunksCache()
