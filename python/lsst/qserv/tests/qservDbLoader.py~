@@ -161,6 +161,5 @@ class QservLoader(DbLoader):
 
         # xrootd is restarted by wmgr
         # Reload Qserv (empty) chunk cache
-        if not self.update_data:
-            self.resetChunksCache()
+        self.resetChunksCache()
 

@@ -50,8 +50,6 @@ _LOG = logging.getLogger()
 # Local non-exported definitions --
 # ---------------------------------
 
-#import pdb
-
 def _parse_args():
 
     # used to get default values
@@ -214,8 +212,6 @@ def _run_integration_test(case_id, testdata_dir, out_dir, mode_list,
 
 def main():
 
-#    pdb.set_trace()
-    
     args = _parse_args()
 
     multi_node = benchmark.is_multi_node()

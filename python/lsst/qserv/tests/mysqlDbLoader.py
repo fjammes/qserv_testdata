@@ -43,6 +43,7 @@ class MysqlLoader(DbLoader):
                  data_reader,
                  db_name,
                  multi_node,
+                 update_data,
                  out_dirname):
 
         super(self.__class__, self).__init__(config,
@@ -52,6 +53,7 @@ class MysqlLoader(DbLoader):
                                              out_dirname)
         self.logger = logging.getLogger(__name__)
 
+        self.update_data = update_data
         self.dataConfig = data_reader
 
     def createLoadTable(self, table):
@@ -77,10 +79,15 @@ class MysqlLoader(DbLoader):
 
         loaderCmd += self.loaderCmdCommonArgs(table)
 
+        if self.update_data:
+            loaderCmd.remove('--delete-tables')
+            print(loaderCmd)
+
         commons.run_command(loaderCmd,
                             stdout=sys.stdout,
                             stderr=sys.stderr)
         self.logger.info("Partitioned data loaded for table %s", table)
+
 
     def prepareDatabase(self):
         """
@@ -89,5 +96,7 @@ class MysqlLoader(DbLoader):
         Create MySQL command-line client
         """
 
-        self.czar_wmgr.dropDb(self._dbName, mustExist=False)
-        self.czar_wmgr.createDb(self._dbName)
+        if not self.update_data:
+            self.czar_wmgr.dropDb(self._dbName, mustExist=False)
+            self.czar_wmgr.createDb(self._dbName)
+
