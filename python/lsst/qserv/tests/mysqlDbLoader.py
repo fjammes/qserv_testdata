@@ -44,7 +44,8 @@ class MysqlLoader(DbLoader):
                  db_name,
                  multi_node,
                  update_data,                 
-                 doNotRegisterXrootdDb,
+                 doNotResetEmptyChunks,
+                 doNotResetCSSTable,
                  out_dirname):
 
         super(self.__class__, self).__init__(config,
@@ -55,7 +56,8 @@ class MysqlLoader(DbLoader):
         self.logger = logging.getLogger(__name__)
 
         self.update_data = update_data
-        self.doNotRegisterXrootdDb = doNotRegisterXrootdDb
+        self.doNotResetEmptyChunks = doNotResetEmptyChunks
+        self.doNotResetCSSTable = doNotResetCSSTable
         self.dataConfig = data_reader
 
     def createLoadTable(self, table):
