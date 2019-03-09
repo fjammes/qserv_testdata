@@ -111,13 +111,15 @@ class QservLoader(DbLoader):
         #        steps, the delete-tables and css-remove options are deleted
         # A new flag stating that the empty chunk table should not be reset
         #        is also set (dbLoader.py)
-        loaderCmd += ['--doNotResetCSSTable']
+        if self.doNotResetCSSTable: loaderCmd += ['--doNotResetCSSTable']
         if self.update_data:
             if "--delete-tables" in loaderCmd: loaderCmd.remove('--delete-tables')
             if "--css-remove" in loaderCmd: loaderCmd.remove("--css-remove")
-            loaderCmd += ['--doNotResetEmptyChunkss']
+            if self.doNotResetEmptyChunks: loaderCmd += ['--doNotResetEmptyChunks']
 
             print(loaderCmd)
+
+#            sys.exit()
 
         # Use same logging configuration for loader and integration test
         # command line, this allow to redirect loader to sys.stdout, sys.stderr

@@ -89,10 +89,10 @@ def _parse_args():
                        default=False,
                        help="Update databases defined in a previous session")    
     group.add_argument("-r", "--doNotResetEmptyChunks", action="store_true", dest="doNotResetEmptyChunks",
-                       default=False,
+                       default=None,
                        help="Do not register xroot DB (linked to the update option)")
-    group.add_argument("-C", "--doNotResetCSSTable", action="store_true", dest="doNotResetCSSTable",
-                       default=False,
+    group.add_argument("-R", "--doNotResetCSSTable", action="store_true", dest="doNotResetCSSTable",
+                       default=None,
                        help="Do not reset CSS table (link between chunk and nodes)")
 
     default_testdata_dir = None
