@@ -47,6 +47,7 @@ class QservLoader(DbLoader):
                  multi_node,
                  update_data,
     	         doNotResetEmptyChunks,
+                 doNotRegisterXrootdDb,
                  doNotResetCSSTable,
                  out_dirname):
 
@@ -66,6 +67,7 @@ class QservLoader(DbLoader):
         self.multi_node = multi_node
         self.update_data = update_data
         self.doNotResetEmptyChunks = doNotResetEmptyChunks
+        self.doNotRegisterXrootdDb = doNotRegisterXrootdDb
         self.doNotResetCSSTable = doNotResetCSSTable
 
     def createLoadTable(self, table):
@@ -112,6 +114,7 @@ class QservLoader(DbLoader):
         # A new flag stating that the empty chunk table should not be reset
         #        is also set (dbLoader.py)
         if self.doNotResetCSSTable: loaderCmd += ['--doNotResetCSSTable']
+        if self.doNotRegisterXrootdDb : loaderCmd += ['--doNotRegisterXrootdDb']
         if self.update_data:
             if "--delete-tables" in loaderCmd: loaderCmd.remove('--delete-tables')
             if "--css-remove" in loaderCmd: loaderCmd.remove("--css-remove")
@@ -172,7 +175,7 @@ class QservLoader(DbLoader):
     def finalize(self):
         """Finalize data loading process
         """
-        if not self.doNotResetEmptyChunks:
+        if self.doNotRegisterXrootdDb and not self.doNotRegisterXrootdDb: 
             self.workerInsertXrootdExportPath()
 
         # xrootd is restarted by wmgr

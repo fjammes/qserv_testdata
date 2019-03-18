@@ -45,6 +45,7 @@ class MysqlLoader(DbLoader):
                  multi_node,
                  update_data,                 
                  doNotResetEmptyChunks,
+                 doNotRegisterXrootdDb,
                  doNotResetCSSTable,
                  out_dirname):
 
@@ -57,6 +58,7 @@ class MysqlLoader(DbLoader):
 
         self.update_data = update_data
         self.doNotResetEmptyChunks = doNotResetEmptyChunks
+        self.doNotRegisterXrootdDb = doNotRegisterXrootdDb
         self.doNotResetCSSTable = doNotResetCSSTable
         self.dataConfig = data_reader
 

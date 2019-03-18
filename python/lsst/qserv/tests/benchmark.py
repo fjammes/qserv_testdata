@@ -100,7 +100,8 @@ class Benchmark(object):
         Top-level directory for test outputs.
     """
 
-    def __init__(self, case_id, multi_node, testdata_dir, update_data, doNotResetEmptyChunks, doNotResetCSSTable, out_dirname_prefix=None):
+    def __init__(self, case_id, multi_node, testdata_dir, update_data,
+                 doNotResetEmptyChunks, doNotRegisterXrootdDb, doNotResetCSSTable, out_dirname_prefix=None):
 
         self.config = commons.read_user_config()
 
@@ -108,6 +109,7 @@ class Benchmark(object):
         self._multi_node = multi_node
         self._update_data = update_data
         self._doNotResetEmptyChunks = doNotResetEmptyChunks
+        self._doNotRegisterXrootdDb = doNotRegisterXrootdDb
         self._doNotResetCSSTable = doNotResetCSSTable
 
         if not out_dirname_prefix:
@@ -324,6 +326,7 @@ class Benchmark(object):
                 self._multi_node,
                 self._update_data,
                 self._doNotResetEmptyChunks,
+                self._doNotRegisterXrootdDb,
                 self._doNotResetCSSTable,
                 self._out_dirname
             )
@@ -335,6 +338,7 @@ class Benchmark(object):
                 self._multi_node,
                 self._update_data,
                 self._doNotResetEmptyChunks,
+                self._doNotRegisterXrootdDb,
                 self._doNotResetCSSTable,
                 self._out_dirname
             )

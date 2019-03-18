@@ -90,8 +90,11 @@ def _parse_args():
                        help="Update databases defined in a previous session")    
     group.add_argument("-r", "--doNotResetEmptyChunks", action="store_true", dest="doNotResetEmptyChunks",
                        default=None,
+                       help="Do not reset empty chunl table (linked to the update option)")
+    group.add_argument("-R", "--doNotRegisterXrootDb", action="store_true", dest="doNotRegisterXrootDb",
+                       default=None,
                        help="Do not register xroot DB (linked to the update option)")
-    group.add_argument("-R", "--doNotResetCSSTable", action="store_true", dest="doNotResetCSSTable",
+    group.add_argument("-S", "--doNotResetCSSTable", action="store_true", dest="doNotResetCSSTable",
                        default=None,
                        help="Do not reset CSS table (link between chunk and nodes)")
 
@@ -178,7 +181,7 @@ def _parse_args():
 
 
 def _run_integration_test(case_id, testdata_dir, out_dir, mode_list,
-                          multi_node, load_data, update_data, doNotResetEmptyChunks, doNotResetCSSTable, stop_at_query):
+                          multi_node, load_data, update_data, doNotResetEmptyChunks, doNotRegisterXrootdDb, doNotResetCSSTable, stop_at_query):
     """ Run integration tests, eventually perform data-loading and query results
     comparison
     @param case_id: test case number
@@ -189,7 +192,7 @@ def _run_integration_test(case_id, testdata_dir, out_dir, mode_list,
     @param load_data: load data before running queries
     @param stop_at_query: run queries between 0 and it
     """
-    bench = benchmark.Benchmark(case_id, multi_node, testdata_dir, update_data, doNotResetEmptyChunks, doNotResetCSSTable, out_dir)
+    bench = benchmark.Benchmark(case_id, multi_node, testdata_dir, update_data, doNotResetEmptyChunks, doNotRegisterXrootdDb, doNotResetCSSTable, out_dir)
     bench.run(mode_list, load_data, stop_at_query)
 
     return_code = 1
@@ -238,7 +241,9 @@ def main():
         ret_code = _run_integration_test(args.case_id, args.testdata_dir,
                                          args.out_dir, args.mode,
                                          multi_node,
-                                         args.load_data, args.update_data, args.doNotResetEmptyChunks, args.doNotResetCSSTable, args.stop_at_query)
+                                         args.load_data, args.update_data,
+                                         args.doNotResetEmptyChunks, args.doNotRegisterXrootdDb,
+                                         args.doNotResetCSSTable, args.stop_at_query)
 
     sys.exit(ret_code)
 
