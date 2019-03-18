@@ -91,7 +91,7 @@ def _parse_args():
     group.add_argument("-r", "--doNotResetEmptyChunks", action="store_true", dest="doNotResetEmptyChunks",
                        default=None,
                        help="Do not reset empty chunl table (linked to the update option)")
-    group.add_argument("-R", "--doNotRegisterXrootdDb", action="store_true", dest="doNotRegisterXrootdDb",
+    group.add_argument("-R", "--doNotRegisterXrootDb", action="store_true", dest="doNotRegisterXrootDb",
                        default=None,
                        help="Do not register xroot DB (linked to the update option)")
     group.add_argument("-S", "--doNotResetCSSTable", action="store_true", dest="doNotResetCSSTable",
