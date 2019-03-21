@@ -1,0 +1,6 @@
+
+extensions: {data: '.csv', schema: '.sql'}
+tables:
+  load-order: ['deepCoadd_ref', 'deepCoadd_forced_src', 'deepCoadd_meas']
+  directors: ['deepCoadd_ref']
+  partitioned-tables: ['deepCoadd_forced_src', 'deepCoadd_meas', 'deepCoadd_ref']
