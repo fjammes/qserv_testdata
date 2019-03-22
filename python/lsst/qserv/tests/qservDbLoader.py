@@ -169,13 +169,13 @@ class QservLoader(DbLoader):
             for wmgr in self.nWmgrs.values():
                 wmgr.xrootdRegisterDb(self._dbName, allowDuplicate=True)
         else:
-            self.logger.info("***** SES **** wmgr.xrootdRegisterDb")
             self.czar_wmgr.xrootdRegisterDb(self._dbName, allowDuplicate=True)
 
     def finalize(self):
         """Finalize data loading process
         """
-        if self.doNotRegisterXrootdDb and not self.doNotRegisterXrootdDb: 
+        if not self.doNotRegisterXrootdDb: 
+            self.logger.info("***** SES **** wmgr.xrootdRegisterDb")
             self.workerInsertXrootdExportPath()
 
         # xrootd is restarted by wmgr
